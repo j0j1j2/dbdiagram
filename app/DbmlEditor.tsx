@@ -5,9 +5,9 @@ import { useEffect } from "react";
 
 export default function DbmlEditor() {
     const monaco = useMonaco();
-     
+
     useEffect(() => {
-        if (monaco == null) return; 
+        if (monaco == null) return;
         monaco.languages.register({ id: "dbml" });
         monaco.languages.setMonarchTokensProvider("dbml", {
             ignoreCase: true,
@@ -15,8 +15,8 @@ export default function DbmlEditor() {
                 root: [
                     [/\b(?:table|type|ref|enum|indexes|index|primary|unique|foreign|key|null|note|not|name|unique|pk|fk|as)\b/, "keyword"],
                     [/\b(?:number|integer|int|string|boolean|float|varchar|timestamp|text|date|datetime)\b/gi, "type"],
-                    [/["][^"]*["]/, "string"], 
-                    [/['][^']*[']/, "string"], 
+                    [/["][^"]*["]/, "string"],
+                    [/['][^']*[']/, "string"],
                     [/`/, "string", "@string"],
                     [/\/\/.*/, "comment"],
                     [/\/\*/, "comment", "@comment"],
@@ -51,7 +51,7 @@ export default function DbmlEditor() {
                 { open: "/*", close: "*/", notIn: ["comment"] },
             ],
         });
-    }, [monaco]); 
+    }, [monaco]);
 
     const defaultValue = `
 // Use DBML to define your database structure
@@ -116,8 +116,8 @@ Ref: users.id < follows.followed_user_id
             defaultValue={defaultValue}
             options={
                 {
-                    fontSize: 13,
-                    minimap: {enabled: false},
+                    fontSize: 12,
+                    minimap: { enabled: false },
                     scrollBeyondLastLine: false,
                 }
             }

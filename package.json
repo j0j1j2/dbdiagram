@@ -11,7 +11,9 @@
   "dependencies": {
     "@dbml/core": "^3.12.0",
     "@monaco-editor/react": "^4.7.0",
+    "@radix-ui/react-icons": "^1.3.2",
     "@radix-ui/react-separator": "^1.1.3",
+    "@xyflow/react": "^12.5.5",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.487.0",
@@ -20,7 +22,8 @@
     "react-dom": "^19.0.0",
     "react-resizable-panels": "^2.1.7",
     "tailwind-merge": "^3.2.0",
-    "tw-animate-css": "^1.2.5"
+    "tw-animate-css": "^1.2.5",
+    "zustand": "^5.0.3"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
