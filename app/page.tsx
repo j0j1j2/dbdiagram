@@ -1,5 +1,4 @@
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
-import { Separator } from "@/components/ui/separator";
 import DbmlEditor from "./DbmlEditor";
 import DbmlGraph from "./DbmlGraph";
 

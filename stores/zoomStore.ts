@@ -4,7 +4,7 @@ interface ZoomState {
     setZoom: (zoom: number) => void;
 }
 const useZoomStore = create<ZoomState>((set) => ({
-    zoom: 100,
+    zoom: 2,
     setZoom: (newZoom) => set({ zoom: newZoom }),
 }));
 
