@@ -2,58 +2,11 @@
 
 import Editor, { useMonaco } from "@monaco-editor/react";
 import { useEffect } from "react";
+import { Parser } from '@dbml/core';
+import useDbmlStore from "@/stores/dbmlStore";
 
-export default function DbmlEditor() {
-	const monaco = useMonaco();
-
-	useEffect(() => {
-		if (monaco == null) return;
-		monaco.languages.register({ id: "dbml" });
-		monaco.languages.setMonarchTokensProvider("dbml", {
-			ignoreCase: true,
-			tokenizer: {
-				root: [
-					[/\b(?:table|type|ref|enum|indexes|index|primary|unique|foreign|key|null|note|not|name|unique|pk|fk|as)\b/, "keyword"],
-					[/\b(?:number|integer|int|string|boolean|float|varchar|timestamp|text|date|datetime)\b/gi, "type"],
-					[/["][^"]*["]/, "string"],
-					[/['][^']*[']/, "string"],
-					[/`/, "string", "@string"],
-					[/\/\/.*/, "comment"],
-					[/\/\*/, "comment", "@comment"],
-				],
-				string: [
-					[/[^`]+/, "string"],
-					[/`/, "string", "@pop"],
-				],
-				comment: [
-					[/\*\//, "comment", "@pop"],
-					[/./, "comment"],
-				],
-			}
-		});
-		monaco.languages.setLanguageConfiguration("dbml", {
-			comments: {
-				lineComment: "//",
-				blockComment: ["/*", "*/"],
-			},
-			brackets: [
-				["{", "}"],
-				["[", "]"],
-				["(", ")"],
-			],
-			autoClosingPairs: [
-				{ open: "{", close: "}" },
-				{ open: "[", close: "]" },
-				{ open: "(", close: ")" },
-				{ open: '"', close: '"', notIn: ["string"] },
-				{ open: "'", close: "'", notIn: ["string"] },
-				{ open: "`", close: "`", notIn: ["string"] },
-				{ open: "/*", close: "*/", notIn: ["comment"] },
-			],
-		});
-	}, [monaco]);
-
-	const defaultValue = `
+// #region default value
+const defaultValue = `
 // Use DBML to define your database structure
 // Docs: https://dbml.dbdiagram.io/docs
 /*
@@ -107,6 +60,64 @@ Ref: users.id < follows.following_user_id
 
 Ref: users.id < follows.followed_user_id
 `
+//# endregion
+
+export default function DbmlEditor() {
+	const monaco = useMonaco();
+	const { setDbml } = useDbmlStore()
+	useEffect(() => {
+		if (monaco == null) return;
+		monaco.languages.register({ id: "dbml" });
+		monaco.languages.setMonarchTokensProvider("dbml", {
+			ignoreCase: true,
+			tokenizer: {
+				root: [
+					[/\b(?:table|type|ref|enum|indexes|index|primary|unique|foreign|key|null|note|not|name|unique|pk|fk|as)\b/, "keyword"],
+					[/\b(?:number|integer|int|string|boolean|float|varchar|timestamp|text|date|datetime)\b/gi, "type"],
+					[/["][^"]*["]/, "string"],
+					[/['][^']*[']/, "string"],
+					[/`/, "string", "@string"],
+					[/\/\/.*/, "comment"],
+					[/\/\*/, "comment", "@comment"],
+				],
+				string: [
+					[/[^`]+/, "string"],
+					[/`/, "string", "@pop"],
+				],
+				comment: [
+					[/\*\//, "comment", "@pop"],
+					[/./, "comment"],
+				],
+			}
+		});
+		monaco.languages.setLanguageConfiguration("dbml", {
+			comments: {
+				lineComment: "//",
+				blockComment: ["/*", "*/"],
+			},
+			brackets: [
+				["{", "}"],
+				["[", "]"],
+				["(", ")"],
+			],
+			autoClosingPairs: [
+				{ open: "{", close: "}" },
+				{ open: "[", close: "]" },
+				{ open: "(", close: ")" },
+				{ open: '"', close: '"', notIn: ["string"] },
+				{ open: "'", close: "'", notIn: ["string"] },
+				{ open: "`", close: "`", notIn: ["string"] },
+				{ open: "/*", close: "*/", notIn: ["comment"] },
+			],
+		});
+	}, [monaco]);
+
+	useEffect(() => {
+		const defaultParsed = Parser.parseDBMLToJSONv2(defaultValue); 
+		setDbml(defaultParsed);
+	}, []);
+
+
 	return (
 		<Editor
 			width={"100%"}
@@ -121,6 +132,18 @@ Ref: users.id < follows.followed_user_id
 					scrollBeyondLastLine: false,
 				}
 			}
+			onChange={(e) => {
+				if (!e) return;
+				try {
+					const parsed = Parser.parseDBMLToJSONv2(e);
+					setDbml(parsed);
+					console.log(parsed);
+				} catch (e: unknown) {
+					if (e instanceof Error) {
+						console.error(e.message);
+					}
+				}
+			}}
 		/>
 	);
 };

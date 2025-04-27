@@ -25,7 +25,7 @@ function DbmlControlInput({
   return (
     <div className='flex justfiy-ceneter items-center'>
       {focused
-        ? <input onBlur={()=>setFocused(false)} type="text" onChange={(e) => onChange(e.target.value)} value={value} autoFocus={true}/>
+        ? <input onBlur={() => setFocused(false)} type="text" onChange={(e) => onChange(e.target.value)} value={value} autoFocus={true} />
         : <span onClick={() => setFocused(true)}>{value}%</span>
       }
     </div>
