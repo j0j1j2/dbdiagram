@@ -7,7 +7,6 @@ import TableNode from './TableNode';
 import useDbmlStore from '@/stores/dbmlStore';
 import { useEffect } from 'react';
 import type { Node, Edge } from '@xyflow/react'
-import { dagreAutoLayout } from './AutoLayout';
 
 const initialNodes: Node[] = [
   { id: '1', position: { x: 0, y: 0 }, data: { label: '1' } },
@@ -58,6 +57,7 @@ export default function DbmlGraph() {
         fitView={true}
         nodeTypes={nodeTypes}
         onMove={(_, vp) => setZoom(vp.zoom)}
+        minZoom={0.05}
       >
         <Background />
         <DbmlControls />
