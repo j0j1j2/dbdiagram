@@ -7,7 +7,7 @@ export default function Home() {
     <div className="w-screen h-screen flex flex-col">
       <header className="">
         <div className="p-3 bg-neutral-800 text-white font-bold">
-          DbDiagram
+          ✅ DBDiagram
         </div>
       </header>
       <main className="flex-grow">
